@@ -1,1 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pro Multi Calculator - Age, GST, SIP & Date Calculator</title>
+  <meta name="description" content="Free Online Multi Calculator - Calculate Age, GST, SIP, Date & Time Difference, and use a full-featured Calculator with keypad. Mobile-friendly, relaxing UI with animations.">
+  <meta name="keywords" content="Age Calculator, GST Calculator, SIP Calculator, Date Calculator, Time Calculator, Online Calculator, Multi Tool Calculator">
+  <meta name="author" content="Pro Multi Tools">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
 
+    body {
+      background: linear-gradient(to right, #a8edea, #fed6e3);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #222;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffeb3b;
+      letter-spacing: 1.5px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+
+    nav {
+      background: #333;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 5px 0;
+    }
+
+    nav button {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      padding: 12px 20px;
+      margin: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      border-bottom: 2px solid transparent;
+    }
+
+    nav button:hover, nav button.active {
+      color: #ffeb3b;
+      border-bottom: 2px solid #ffeb3b;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .calculator {
+      display: none;
+      background: #ffffff;
+      color: #222;
+      padding: 25px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .calculator.active { display: block; }
+
+    h3 {
+      margin: 10px 0 15px;
+      color: #444;
+      font-size: 22px;
+    }
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 10px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    button.calc-btn {
+      background: #ffeb3b;
+      color: #111;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease-in-out;
+    }
+
+    button.calc-btn:hover { background: #fdd835; }
+
+    .result {
+      margin-top: 15px;
+      font-size: 18px;
+      color: #222;
+    }
+
+    /* Calculator Keypad */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .keypad button {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: #eceff1;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .keypad button:hover { background: #cfd8dc; }
+    .keypad button.equal {
+      background: #ffeb3b;
+      color: #111;
+      font-weight: bold;
+    }
+    .keypad button.equal:hover { background: #fdd835; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-6px);} }
+  </style>
+</head>
+<body>
+
+<header>Pro Multi Calculator</header>
+
+<nav>
+  <button class="nav-btn active" onclick="showCalculator('ageCalc')">Age</button>
+  <button class="nav-btn" onclick="showCalculator('dateTimeCalc')">Date/Time</button>
+  <button class="nav-btn" onclick="showCalculator('gstCalc')">GST</button>
+  <button class="nav-btn" onclick="showCalculator('sipCalc')">SIP</button>
+  <button class="nav-btn" onclick="showCalculator('normalCalc')">Calculator</button>
+</nav>
+
+<main>
+  <!-- Age Calculator -->
+  <div class="calculator active" id="ageCalc">
+    <div class="icon">🧑</div>
+    <h3>Age Calculator</h3>
+    <input type="date" id="birthDate">
+    <button class="calc-btn" onclick="calculateAge()">Calculate Age</button>
+    <div class="result" id="ageResult"></div>
+  </div>
+
+  <!-- Date/Time Calculator -->
+  <div class="calculator" id="dateTimeCalc">
+    <div class="icon">⏳</div>
+    <h3>Date & Time Calculator</h3>
+    <input type="date" id="date1">
+    <input type="date" id="date2">
+    <button class="calc-btn" onclick="calculateDateDifference()">Find Date Difference</button>
+    <div class="result" id="dateDiffResult"></div>
+    <hr style="margin:15px 0;">
+    <input type="time" id="time1">
+    <input type="time" id="time2">
+    <button class="calc-btn" onclick="calculateTimeDifference()">Find Time Difference</button>
+    <div class="result" id="timeDiffResult"></div>
+  </div>
+
+  <!-- GST Calculator -->
+  <div class="calculator" id="gstCalc">
+    <div class="icon">💰</div>
+    <h3>GST Calculator</h3>
+    <input type="number" id="amount" placeholder="Enter Amount">
+    <input type="number" id="gstRate" placeholder="GST Rate (%)">
+    <button class="calc-btn" onclick="calculateGST()">Calculate GST</button>
+    <div class="result" id="gstResult"></div>
+  </div>
+
+  <!-- SIP Calculator -->
+  <div class="calculator" id="sipCalc">
+    <div class="icon">📈</div>
+    <h3>SIP Calculator</h3>
+    <input type="number" id="monthlyInvestment" placeholder="Monthly Investment (₹)">
+    <input type="number" id="rate" placeholder="Annual Interest Rate (%)">
+    <input type="number" id="years" placeholder="Years">
+    <button class="calc-btn" onclick="calculateSIP()">Calculate SIP</button>
+    <div class="result" id="sipResult"></div>
+  </div>
+
+  <!-- Normal Calculator -->
+  <div class="calculator" id="normalCalc">
+    <div class="icon">🖩</div>
+    <h3>Normal Calculator</h3>
+    <input type="text" id="calcInput" placeholder="0" readonly>
+    <div class="keypad">
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button onclick="appendValue('/')">÷</button>
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('6')">6</button>
+      <button onclick="appendValue('*')">×</button>
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('3')">3</button>
+      <button onclick="appendValue('-')">−</button>
+      <button onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('.')">.</button>
+      <button onclick="clearInput()">C</button>
+      <button onclick="appendValue('+')">+</button>
+      <button class="equal" style="grid-column: span 4;" onclick="calculate()">=</button>
+    </div>
+    <div class="result" id="calcResult"></div>
+  </div>
+</main>
+
+<script>
+  function showCalculator(id) {
+    document.querySelectorAll('.calculator').forEach(c => c.classList.remove('active'));
+    document.querySelector(`#${id}`).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  function calculateAge() {
+    let birthDate = new Date(document.getElementById("birthDate").value);
+    if (!birthDate) {
+      document.getElementById("ageResult").innerText = "Please select a date.";
+      return;
+    }
+    let today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    let m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+    document.getElementById("ageResult").innerText = "Your Age: " + age + " years";
+  }
+
+  function calculateDateDifference() {
+    let d1 = new Date(document.getElementById("date1").value);
+    let d2 = new Date(document.getElementById("date2").value);
+    if (isNaN(d1) || isNaN(d2)) {
+      document.getElementById("dateDiffResult").innerText = "Please select both dates.";
+      return;
+    }
+    let diffTime = Math.abs(d2 - d1);
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    let years = Math.floor(diffDays / 365);
+    let months = Math.floor((diffDays % 365) / 30);
+    document.getElementById("dateDiffResult").innerText = 
+      `Difference: ${diffDays} days (${years} years, ${months} months approx)`;
+  }
+
+  function calculateTimeDifference() {
+    let t1 = document.getElementById("time1").value;
+    let t2 = document.getElementById("time2").value;
+    if (!t1 || !t2) {
+      document.getElementById("timeDiffResult").innerText = "Please select both times.";
+      return;
+    }
+    let [h1, m1] = t1.split(":").map(Number);
+    let [h2, m2] = t2.split(":").map(Number);
+    let minutes1 = h1 * 60 + m1;
+    let minutes2 = h2 * 60 + m2;
+    let diff = Math.abs(minutes2 - minutes1);
+    let hours = Math.floor(diff / 60);
+    let minutes = diff % 60;
+    document.getElementById("timeDiffResult").innerText = 
+      `Difference: ${hours} hours, ${minutes} minutes`;
+  }
+
+  function calculateGST() {
+    let amount = parseFloat(document.getElementById("amount").value);
+    let gstRate = parseFloat(document.getElementById("gstRate").value);
+    if (isNaN(amount) || isNaN(gstRate)) {
+      document.getElementById("gstResult").innerText = "Enter valid values.";
+      return;
+    }
+    let gstAmount = (amount * gstRate) / 100;
+    let total = amount + gstAmount;
+    document.getElementById("gstResult").innerText = 
+      "GST: ₹" + gstAmount.toFixed(2) + " | Total: ₹" + total.toFixed(2);
+  }
+
+  function calculateSIP() {
+    let monthlyInvestment = parseFloat(document.getElementById("monthlyInvestment").value);
+    let annualRate = parseFloat(document.getElementById("rate").value) / 100;
+    let years = parseInt(document.getElementById("years").value);
+    if (isNaN(monthlyInvestment) || isNaN(annualRate) || isNaN(years)) {
+      document.getElementById("sipResult").innerText = "Enter valid values.";
+      return;
+    }
+    let months = years * 12;
+    let monthlyRate = annualRate / 12;
+    let maturity = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+    document.getElementById("sipResult").innerText = 
+      "Maturity Amount: ₹" + maturity.toFixed(2);
+  }
+
+  function appendValue(val) { document.getElementById("calcInput").value += val; }
+  function clearInput() { document.getElementById("calcInput").value = ''; document.getElementById("calcResult").innerText = ''; }
+  function calculate() {
+    try {
+      let expression = document.getElementById("calcInput").value;
+      let result = eval(expression);
+      document.getElementById("calcResult").innerText = "Result: " + result;
+    } catch (e) {
+      document.getElementById("calcResult").innerText = "Invalid Expression!";
+    }
+  }
+</script>
+
+</body>
+</html>
