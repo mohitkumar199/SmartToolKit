@@ -4,37 +4,91 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pro Multi Calculator - Age, GST, SIP & Date Calculator</title>
-  <meta name="description" content="Free Online Multi Calculator - Calculate Age, GST, SIP, Date & Time Difference, and use a full-featured Calculator with keypad. Mobile-friendly, relaxing UI with animations.">
-  <meta name="keywords" content="Age Calculator, GST Calculator, SIP Calculator, Date Calculator, Time Calculator, Online Calculator, Multi Tool Calculator">
+  <meta name="description" content="Free Online Multi Calculator - Calculate Age, GST, SIP, Date & Time Difference, BMI, Currency and use a full-featured Calculator with keypad. Mobile-friendly, relaxing UI with animations.">
+  <meta name="keywords" content="Age Calculator, GST Calculator, SIP Calculator, Date Calculator, Time Calculator, Online Calculator, Multi Tool Calculator, BMI Calculator, Currency Converter">
   <meta name="author" content="Pro Multi Tools">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+    :root {
+      --primary-color: #ffeb3b;
+      --primary-hover: #fdd835;
+      --bg-color: #f5f5f5;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --text-light: #666;
+      --header-bg: #222;
+      --nav-bg: #333;
+      --shadow: 0 4px 25px rgba(0,0,0,0.15);
+      --border-radius: 20px;
+      --transition: all 0.3s ease-in-out;
+    }
+
+    .dark-mode {
+      --primary-color: #ffc107;
+      --primary-hover: #ffab00;
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #f5f5f5;
+      --text-light: #b0b0b0;
+      --header-bg: #1a1a1a;
+      --nav-bg: #252525;
+      --shadow: 0 4px 25px rgba(0,0,0,0.3);
+    }
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    }
 
     body {
-      background: linear-gradient(to right, #a8edea, #fed6e3);
-      color: #333;
+      background: var(--bg-color);
+      color: var(--text-color);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      transition: var(--transition);
     }
 
     header {
-      background: #222;
+      background: var(--header-bg);
       padding: 15px;
       text-align: center;
       font-size: 24px;
       font-weight: bold;
-      color: #ffeb3b;
+      color: var(--primary-color);
       letter-spacing: 1.5px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+      position: relative;
+    }
+
+    .theme-switch {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--primary-color);
+      font-size: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .theme-switch:hover {
+      color: var(--primary-hover);
+      transform: translateY(-50%) scale(1.1);
     }
 
     nav {
-      background: #333;
+      background: var(--nav-bg);
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
       padding: 5px 0;
+      overflow-x: auto;
+      white-space: nowrap;
     }
 
     nav button {
@@ -45,41 +99,43 @@
       padding: 12px 20px;
       margin: 5px;
       cursor: pointer;
-      transition: all 0.3s ease-in-out;
+      transition: var(--transition);
       border-bottom: 2px solid transparent;
+      min-width: 100px;
     }
 
     nav button:hover, nav button.active {
-      color: #ffeb3b;
-      border-bottom: 2px solid #ffeb3b;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
     }
 
     main {
       flex: 1;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       padding: 20px;
     }
 
     .calculator {
       display: none;
-      background: #ffffff;
-      color: #222;
+      background: var(--card-bg);
+      color: var(--text-color);
       padding: 25px;
-      border-radius: 20px;
+      border-radius: var(--border-radius);
       width: 100%;
-      max-width: 420px;
+      max-width: 450px;
       text-align: center;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow);
       animation: fadeIn 0.6s ease-in-out;
+      margin: 10px;
     }
 
     .calculator.active { display: block; }
 
     h3 {
       margin: 10px 0 15px;
-      color: #444;
+      color: var(--text-color);
       font-size: 22px;
     }
 
@@ -88,21 +144,43 @@
       height: 60px;
       margin: 0 auto 10px;
       animation: float 3s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
     }
 
-    input {
+    .input-group {
+      margin: 15px 0;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    input, select {
       width: 100%;
       padding: 12px;
-      margin: 10px 0;
       border-radius: 8px;
       border: 1px solid #ccc;
       outline: none;
       font-size: 16px;
-      text-align: center;
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(255, 235, 59, 0.2);
     }
 
     button.calc-btn {
-      background: #ffeb3b;
+      background: var(--primary-color);
       color: #111;
       border: none;
       padding: 12px;
@@ -112,15 +190,22 @@
       width: 100%;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s ease-in-out;
+      transition: var(--transition);
     }
 
-    button.calc-btn:hover { background: #fdd835; }
+    button.calc-btn:hover { 
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
 
     .result {
       margin-top: 15px;
       font-size: 18px;
-      color: #222;
+      color: var(--text-color);
+      padding: 15px;
+      background: rgba(255, 235, 59, 0.1);
+      border-radius: 8px;
+      border-left: 4px solid var(--primary-color);
     }
 
     /* Calculator Keypad */
@@ -135,202 +220,615 @@
       font-size: 18px;
       border: none;
       border-radius: 8px;
-      background: #eceff1;
-      color: #333;
+      background: rgba(0,0,0,0.05);
+      color: var(--text-color);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: var(--transition);
     }
-    .keypad button:hover { background: #cfd8dc; }
+    .keypad button:hover { 
+      background: rgba(0,0,0,0.1);
+      transform: scale(1.05);
+    }
     .keypad button.equal {
-      background: #ffeb3b;
+      background: var(--primary-color);
       color: #111;
       font-weight: bold;
     }
-    .keypad button.equal:hover { background: #fdd835; }
+    .keypad button.equal:hover { 
+      background: var(--primary-hover);
+      transform: scale(1.05);
+    }
+    .keypad button.operator {
+      background: rgba(255, 235, 59, 0.2);
+    }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
-    @keyframes float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-6px);} }
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      nav button {
+        padding: 10px 15px;
+        font-size: 14px;
+        min-width: 80px;
+      }
+      .calculator {
+        padding: 15px;
+      }
+      h3 {
+        font-size: 20px;
+      }
+    }
+
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(10px);} 
+      to { opacity: 1; transform: translateY(0);} 
+    }
+    @keyframes float { 
+      0%,100% { transform: translateY(0);} 
+      50% { transform: translateY(-6px);} 
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
 
-<header>Pro Multi Calculator</header>
+<header>
+  Pro Multi Calculator
+  <button class="theme-switch" id="themeSwitch"><i class="fas fa-moon"></i></button>
+</header>
 
 <nav>
-  <button class="nav-btn active" onclick="showCalculator('ageCalc')">Age</button>
-  <button class="nav-btn" onclick="showCalculator('dateTimeCalc')">Date/Time</button>
-  <button class="nav-btn" onclick="showCalculator('gstCalc')">GST</button>
-  <button class="nav-btn" onclick="showCalculator('sipCalc')">SIP</button>
-  <button class="nav-btn" onclick="showCalculator('normalCalc')">Calculator</button>
+  <button class="nav-btn active" onclick="showCalculator('ageCalc')"><i class="fas fa-birthday-cake"></i> Age</button>
+  <button class="nav-btn" onclick="showCalculator('dateTimeCalc')"><i class="far fa-calendar-alt"></i> Date/Time</button>
+  <button class="nav-btn" onclick="showCalculator('gstCalc')"><i class="fas fa-receipt"></i> GST</button>
+  <button class="nav-btn" onclick="showCalculator('sipCalc')"><i class="fas fa-chart-line"></i> SIP</button>
+  <button class="nav-btn" onclick="showCalculator('bmiCalc')"><i class="fas fa-weight"></i> BMI</button>
+  <button class="nav-btn" onclick="showCalculator('currencyCalc')"><i class="fas fa-money-bill-wave"></i> Currency</button>
+  <button class="nav-btn" onclick="showCalculator('normalCalc')"><i class="fas fa-calculator"></i> Calculator</button>
 </nav>
 
 <main>
   <!-- Age Calculator -->
   <div class="calculator active" id="ageCalc">
-    <div class="icon">🧑</div>
+    <div class="icon"><i class="fas fa-birthday-cake"></i></div>
     <h3>Age Calculator</h3>
-    <input type="date" id="birthDate">
-    <button class="calc-btn" onclick="calculateAge()">Calculate Age</button>
-    <div class="result" id="ageResult"></div>
+    <div class="input-group">
+      <label for="birthDate">Enter your birth date:</label>
+      <input type="date" id="birthDate" max="">
+    </div>
+    <button class="calc-btn" onclick="calculateAge()"><i class="fas fa-calculator"></i> Calculate Age</button>
+    <div class="result" id="ageResult">Select your birth date to calculate your age</div>
   </div>
 
   <!-- Date/Time Calculator -->
   <div class="calculator" id="dateTimeCalc">
-    <div class="icon">⏳</div>
+    <div class="icon"><i class="far fa-clock"></i></div>
     <h3>Date & Time Calculator</h3>
-    <input type="date" id="date1">
-    <input type="date" id="date2">
-    <button class="calc-btn" onclick="calculateDateDifference()">Find Date Difference</button>
-    <div class="result" id="dateDiffResult"></div>
-    <hr style="margin:15px 0;">
-    <input type="time" id="time1">
-    <input type="time" id="time2">
-    <button class="calc-btn" onclick="calculateTimeDifference()">Find Time Difference</button>
-    <div class="result" id="timeDiffResult"></div>
+    <div class="input-group">
+      <label for="date1">Start Date:</label>
+      <input type="date" id="date1">
+    </div>
+    <div class="input-group">
+      <label for="date2">End Date:</label>
+      <input type="date" id="date2">
+    </div>
+    <button class="calc-btn" onclick="calculateDateDifference()"><i class="fas fa-calendar-minus"></i> Find Date Difference</button>
+    <div class="result" id="dateDiffResult">Select dates to calculate difference</div>
+    <hr style="margin:15px 0; border-color: rgba(0,0,0,0.1);">
+    <div class="input-group">
+      <label for="time1">Start Time:</label>
+      <input type="time" id="time1">
+    </div>
+    <div class="input-group">
+      <label for="time2">End Time:</label>
+      <input type="time" id="time2">
+    </div>
+    <button class="calc-btn" onclick="calculateTimeDifference()"><i class="far fa-clock"></i> Find Time Difference</button>
+    <div class="result" id="timeDiffResult">Select times to calculate difference</div>
   </div>
 
   <!-- GST Calculator -->
   <div class="calculator" id="gstCalc">
-    <div class="icon">💰</div>
+    <div class="icon"><i class="fas fa-receipt"></i></div>
     <h3>GST Calculator</h3>
-    <input type="number" id="amount" placeholder="Enter Amount">
-    <input type="number" id="gstRate" placeholder="GST Rate (%)">
-    <button class="calc-btn" onclick="calculateGST()">Calculate GST</button>
-    <div class="result" id="gstResult"></div>
+    <div class="input-group">
+      <label for="amount">Enter Amount:</label>
+      <input type="number" id="amount" placeholder="e.g. 1000">
+    </div>
+    <div class="input-group">
+      <label for="gstRate">GST Rate (%):</label>
+      <input type="number" id="gstRate" placeholder="e.g. 18" min="0" max="100">
+    </div>
+    <div class="input-group">
+      <label for="gstType">Calculation Type:</label>
+      <select id="gstType">
+        <option value="exclusive">Add GST to amount (Exclusive)</option>
+        <option value="inclusive">Extract GST from amount (Inclusive)</option>
+      </select>
+    </div>
+    <button class="calc-btn" onclick="calculateGST()"><i class="fas fa-calculator"></i> Calculate GST</button>
+    <div class="result" id="gstResult">Enter amount and GST rate to calculate</div>
   </div>
 
   <!-- SIP Calculator -->
   <div class="calculator" id="sipCalc">
-    <div class="icon">📈</div>
+    <div class="icon"><i class="fas fa-chart-line"></i></div>
     <h3>SIP Calculator</h3>
-    <input type="number" id="monthlyInvestment" placeholder="Monthly Investment (₹)">
-    <input type="number" id="rate" placeholder="Annual Interest Rate (%)">
-    <input type="number" id="years" placeholder="Years">
-    <button class="calc-btn" onclick="calculateSIP()">Calculate SIP</button>
-    <div class="result" id="sipResult"></div>
+    <div class="input-group">
+      <label for="monthlyInvestment">Monthly Investment (₹):</label>
+      <input type="number" id="monthlyInvestment" placeholder="e.g. 5000" min="100">
+    </div>
+    <div class="input-group">
+      <label for="rate">Expected Annual Return (%):</label>
+      <input type="number" id="rate" placeholder="e.g. 12" step="0.1" min="0.1" max="50">
+    </div>
+    <div class="input-group">
+      <label for="years">Investment Period (Years):</label>
+      <input type="number" id="years" placeholder="e.g. 10" min="1" max="50">
+    </div>
+    <button class="calc-btn" onclick="calculateSIP()"><i class="fas fa-calculator"></i> Calculate SIP</button>
+    <div class="result" id="sipResult">Enter details to calculate SIP returns</div>
+  </div>
+
+  <!-- BMI Calculator -->
+  <div class="calculator" id="bmiCalc">
+    <div class="icon"><i class="fas fa-weight"></i></div>
+    <h3>BMI Calculator</h3>
+    <div class="input-group">
+      <label for="height">Height (cm):</label>
+      <input type="number" id="height" placeholder="e.g. 170" min="50" max="250">
+    </div>
+    <div class="input-group">
+      <label for="weight">Weight (kg):</label>
+      <input type="number" id="weight" placeholder="e.g. 70" min="10" max="300">
+    </div>
+    <button class="calc-btn" onclick="calculateBMI()"><i class="fas fa-calculator"></i> Calculate BMI</button>
+    <div class="result" id="bmiResult">Enter your height and weight</div>
+    <div class="result" id="bmiCategory" style="margin-top: 10px;"></div>
+  </div>
+
+  <!-- Currency Converter -->
+  <div class="calculator" id="currencyCalc">
+    <div class="icon"><i class="fas fa-money-bill-wave"></i></div>
+    <h3>Currency Converter</h3>
+    <div class="input-group">
+      <label for="currencyAmount">Amount:</label>
+      <input type="number" id="currencyAmount" placeholder="e.g. 100" min="0">
+    </div>
+    <div class="input-group">
+      <label for="fromCurrency">From:</label>
+      <select id="fromCurrency">
+        <option value="USD">US Dollar (USD)</option>
+        <option value="EUR">Euro (EUR)</option>
+        <option value="GBP">British Pound (GBP)</option>
+        <option value="INR" selected>Indian Rupee (INR)</option>
+        <option value="JPY">Japanese Yen (JPY)</option>
+        <option value="AUD">Australian Dollar (AUD)</option>
+        <option value="CAD">Canadian Dollar (CAD)</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="toCurrency">To:</label>
+      <select id="toCurrency">
+        <option value="USD" selected>US Dollar (USD)</option>
+        <option value="EUR">Euro (EUR)</option>
+        <option value="GBP">British Pound (GBP)</option>
+        <option value="INR">Indian Rupee (INR)</option>
+        <option value="JPY">Japanese Yen (JPY)</option>
+        <option value="AUD">Australian Dollar (AUD)</option>
+        <option value="CAD">Canadian Dollar (CAD)</option>
+      </select>
+    </div>
+    <button class="calc-btn" onclick="convertCurrency()"><i class="fas fa-exchange-alt"></i> Convert</button>
+    <div class="result" id="currencyResult">Enter amount to convert</div>
+    <div class="result" id="exchangeRate" style="margin-top: 10px; font-size: 14px;"></div>
   </div>
 
   <!-- Normal Calculator -->
   <div class="calculator" id="normalCalc">
-    <div class="icon">🖩</div>
-    <h3>Normal Calculator</h3>
-    <input type="text" id="calcInput" placeholder="0" readonly>
+    <div class="icon"><i class="fas fa-calculator"></i></div>
+    <h3>Advanced Calculator</h3>
+    <div class="input-group">
+      <input type="text" id="calcInput" placeholder="0" readonly>
+    </div>
     <div class="keypad">
       <button onclick="appendValue('7')">7</button>
       <button onclick="appendValue('8')">8</button>
       <button onclick="appendValue('9')">9</button>
-      <button onclick="appendValue('/')">÷</button>
+      <button onclick="appendValue('/')" class="operator">÷</button>
       <button onclick="appendValue('4')">4</button>
       <button onclick="appendValue('5')">5</button>
       <button onclick="appendValue('6')">6</button>
-      <button onclick="appendValue('*')">×</button>
+      <button onclick="appendValue('*')" class="operator">×</button>
       <button onclick="appendValue('1')">1</button>
       <button onclick="appendValue('2')">2</button>
       <button onclick="appendValue('3')">3</button>
-      <button onclick="appendValue('-')">−</button>
+      <button onclick="appendValue('-')" class="operator">−</button>
       <button onclick="appendValue('0')">0</button>
       <button onclick="appendValue('.')">.</button>
+      <button onclick="backspace()"><i class="fas fa-backspace"></i></button>
+      <button onclick="appendValue('+')" class="operator">+</button>
+      <button onclick="appendValue('(')">(</button>
+      <button onclick="appendValue(')')">)</button>
       <button onclick="clearInput()">C</button>
-      <button onclick="appendValue('+')">+</button>
+      <button onclick="appendValue('%')" class="operator">%</button>
       <button class="equal" style="grid-column: span 4;" onclick="calculate()">=</button>
     </div>
-    <div class="result" id="calcResult"></div>
+    <div class="result" id="calcResult">0</div>
   </div>
 </main>
 
 <script>
+  // Initialize the app
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set max date for age calculator to today
+    document.getElementById('birthDate').max = new Date().toISOString().split('T')[0];
+    
+    // Load saved theme preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('themeSwitch').innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    
+    // Load last used calculator if available
+    const lastCalculator = localStorage.getItem('lastCalculator');
+    if (lastCalculator) {
+      showCalculator(lastCalculator);
+    }
+    
+    // Initialize calculator input
+    document.getElementById('calcInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        calculate();
+      }
+    });
+  });
+
+  // Theme switcher
+  document.getElementById('themeSwitch').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+    this.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  });
+
+  // Show calculator function
   function showCalculator(id) {
     document.querySelectorAll('.calculator').forEach(c => c.classList.remove('active'));
     document.querySelector(`#${id}`).classList.add('active');
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
+    localStorage.setItem('lastCalculator', id);
   }
 
+  // Age Calculator
   function calculateAge() {
-    let birthDate = new Date(document.getElementById("birthDate").value);
-    if (!birthDate) {
-      document.getElementById("ageResult").innerText = "Please select a date.";
+    const birthDate = new Date(document.getElementById("birthDate").value);
+    const today = new Date();
+    
+    if (isNaN(birthDate.getTime())) {
+      document.getElementById("ageResult").innerText = "Please select a valid birth date.";
       return;
     }
-    let today = new Date();
+    
+    if (birthDate > today) {
+      document.getElementById("ageResult").innerText = "Birth date cannot be in the future!";
+      return;
+    }
+    
     let age = today.getFullYear() - birthDate.getFullYear();
-    let m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-    document.getElementById("ageResult").innerText = "Your Age: " + age + " years";
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    // Calculate months and days
+    let months, days;
+    if (today.getMonth() >= birthDate.getMonth()) {
+      months = today.getMonth() - birthDate.getMonth();
+    } else {
+      months = 12 + today.getMonth() - birthDate.getMonth();
+      age--;
+    }
+    
+    if (today.getDate() >= birthDate.getDate()) {
+      days = today.getDate() - birthDate.getDate();
+    } else {
+      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      days = lastMonth.getDate() - birthDate.getDate() + today.getDate();
+      months--;
+      if (months < 0) {
+        months = 11;
+        age--;
+      }
+    }
+    
+    document.getElementById("ageResult").innerHTML = 
+      `Your Age: <strong>${age} years, ${months} months, ${days} days</strong>`;
   }
 
+  // Date Difference Calculator
   function calculateDateDifference() {
-    let d1 = new Date(document.getElementById("date1").value);
-    let d2 = new Date(document.getElementById("date2").value);
-    if (isNaN(d1) || isNaN(d2)) {
+    const d1 = new Date(document.getElementById("date1").value);
+    const d2 = new Date(document.getElementById("date2").value);
+    
+    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
       document.getElementById("dateDiffResult").innerText = "Please select both dates.";
       return;
     }
-    let diffTime = Math.abs(d2 - d1);
-    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    let years = Math.floor(diffDays / 365);
-    let months = Math.floor((diffDays % 365) / 30);
-    document.getElementById("dateDiffResult").innerText = 
-      `Difference: ${diffDays} days (${years} years, ${months} months approx)`;
+    
+    if (d1 > d2) {
+      document.getElementById("dateDiffResult").innerText = "End date must be after start date.";
+      return;
+    }
+    
+    const diffTime = Math.abs(d2 - d1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Calculate years, months, days
+    let years = d2.getFullYear() - d1.getFullYear();
+    let months = d2.getMonth() - d1.getMonth();
+    let days = d2.getDate() - d1.getDate();
+    
+    if (days < 0) {
+      const lastMonth = new Date(d2.getFullYear(), d2.getMonth(), 0);
+      days = lastMonth.getDate() - d1.getDate() + d2.getDate();
+      months--;
+    }
+    
+    if (months < 0) {
+      months = 12 + months;
+      years--;
+    }
+    
+    document.getElementById("dateDiffResult").innerHTML = 
+      `Difference: <strong>${diffDays} days</strong><br>
+       (${years} years, ${months} months, ${days} days)`;
   }
 
+  // Time Difference Calculator
   function calculateTimeDifference() {
-    let t1 = document.getElementById("time1").value;
-    let t2 = document.getElementById("time2").value;
+    const t1 = document.getElementById("time1").value;
+    const t2 = document.getElementById("time2").value;
+    
     if (!t1 || !t2) {
       document.getElementById("timeDiffResult").innerText = "Please select both times.";
       return;
     }
-    let [h1, m1] = t1.split(":").map(Number);
-    let [h2, m2] = t2.split(":").map(Number);
+    
+    const [h1, m1] = t1.split(":").map(Number);
+    const [h2, m2] = t2.split(":").map(Number);
+    
     let minutes1 = h1 * 60 + m1;
     let minutes2 = h2 * 60 + m2;
-    let diff = Math.abs(minutes2 - minutes1);
-    let hours = Math.floor(diff / 60);
-    let minutes = diff % 60;
-    document.getElementById("timeDiffResult").innerText = 
-      `Difference: ${hours} hours, ${minutes} minutes`;
+    
+    // Handle overnight difference
+    if (minutes2 < minutes1) {
+      minutes2 += 24 * 60;
+    }
+    
+    const diff = minutes2 - minutes1;
+    const hours = Math.floor(diff / 60);
+    const minutes = diff % 60;
+    
+    document.getElementById("timeDiffResult").innerHTML = 
+      `Difference: <strong>${hours} hours, ${minutes} minutes</strong>`;
   }
 
+  // GST Calculator
   function calculateGST() {
-    let amount = parseFloat(document.getElementById("amount").value);
-    let gstRate = parseFloat(document.getElementById("gstRate").value);
-    if (isNaN(amount) || isNaN(gstRate)) {
-      document.getElementById("gstResult").innerText = "Enter valid values.";
+    const amount = parseFloat(document.getElementById("amount").value);
+    const gstRate = parseFloat(document.getElementById("gstRate").value);
+    const gstType = document.getElementById("gstType").value;
+    
+    if (isNaN(amount) || amount <= 0) {
+      document.getElementById("gstResult").innerText = "Please enter a valid amount.";
       return;
     }
-    let gstAmount = (amount * gstRate) / 100;
-    let total = amount + gstAmount;
-    document.getElementById("gstResult").innerText = 
-      "GST: ₹" + gstAmount.toFixed(2) + " | Total: ₹" + total.toFixed(2);
+    
+    if (isNaN(gstRate) || gstRate < 0 || gstRate > 100) {
+      document.getElementById("gstResult").innerText = "Please enter a valid GST rate (0-100%).";
+      return;
+    }
+    
+    let gstAmount, total, originalAmount;
+    
+    if (gstType === "exclusive") {
+      gstAmount = (amount * gstRate) / 100;
+      total = amount + gstAmount;
+      document.getElementById("gstResult").innerHTML = 
+        `GST Amount (${gstRate}%): <strong>₹${gstAmount.toFixed(2)}</strong><br>
+         Total Amount: <strong>₹${total.toFixed(2)}</strong>`;
+    } else {
+      originalAmount = (amount * 100) / (100 + gstRate);
+      gstAmount = amount - originalAmount;
+      document.getElementById("gstResult").innerHTML = 
+        `Original Amount: <strong>₹${originalAmount.toFixed(2)}</strong><br>
+         GST Amount (${gstRate}%): <strong>₹${gstAmount.toFixed(2)}</strong>`;
+    }
   }
 
+  // SIP Calculator
   function calculateSIP() {
-    let monthlyInvestment = parseFloat(document.getElementById("monthlyInvestment").value);
-    let annualRate = parseFloat(document.getElementById("rate").value) / 100;
-    let years = parseInt(document.getElementById("years").value);
-    if (isNaN(monthlyInvestment) || isNaN(annualRate) || isNaN(years)) {
-      document.getElementById("sipResult").innerText = "Enter valid values.";
+    const monthlyInvestment = parseFloat(document.getElementById("monthlyInvestment").value);
+    const annualRate = parseFloat(document.getElementById("rate").value) / 100;
+    const years = parseInt(document.getElementById("years").value);
+    
+    if (isNaN(monthlyInvestment) || monthlyInvestment <= 0) {
+      document.getElementById("sipResult").innerText = "Please enter a valid monthly investment.";
       return;
     }
-    let months = years * 12;
-    let monthlyRate = annualRate / 12;
-    let maturity = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
-    document.getElementById("sipResult").innerText = 
-      "Maturity Amount: ₹" + maturity.toFixed(2);
+    
+    if (isNaN(annualRate) || annualRate <= 0) {
+      document.getElementById("sipResult").innerText = "Please enter a valid annual return rate.";
+      return;
+    }
+    
+    if (isNaN(years) || years <= 0) {
+      document.getElementById("sipResult").innerText = "Please enter a valid investment period.";
+      return;
+    }
+    
+    const months = years * 12;
+    const monthlyRate = annualRate / 12;
+    const maturity = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+    const totalInvestment = monthlyInvestment * months;
+    const estimatedReturns = maturity - totalInvestment;
+    
+    document.getElementById("sipResult").innerHTML = 
+      `Total Investment: <strong>₹${totalInvestment.toLocaleString('en-IN')}</strong><br>
+       Estimated Returns: <strong>₹${estimatedReturns.toLocaleString('en-IN')}</strong><br>
+       Maturity Amount: <strong>₹${maturity.toLocaleString('en-IN')}</strong>`;
   }
 
-  function appendValue(val) { document.getElementById("calcInput").value += val; }
-  function clearInput() { document.getElementById("calcInput").value = ''; document.getElementById("calcResult").innerText = ''; }
+  // BMI Calculator
+  function calculateBMI() {
+    const height = parseFloat(document.getElementById("height").value) / 100; // convert cm to m
+    const weight = parseFloat(document.getElementById("weight").value);
+    
+    if (isNaN(height) || height <= 0) {
+      document.getElementById("bmiResult").innerText = "Please enter a valid height.";
+      return;
+    }
+    
+    if (isNaN(weight) || weight <= 0) {
+      document.getElementById("bmiResult").innerText = "Please enter a valid weight.";
+      return;
+    }
+    
+    const bmi = weight / (height * height);
+    let category = "";
+    
+    if (bmi < 18.5) {
+      category = "Underweight";
+    } else if (bmi >= 18.5 && bmi < 25) {
+      category = "Normal weight";
+    } else if (bmi >= 25 && bmi < 30) {
+      category = "Overweight";
+    } else {
+      category = "Obese";
+    }
+    
+    document.getElementById("bmiResult").innerHTML = 
+      `Your BMI: <strong>${bmi.toFixed(1)}</strong>`;
+    document.getElementById("bmiCategory").innerHTML = 
+      `Category: <strong>${category}</strong>`;
+  }
+
+  // Currency Converter (using mock rates - in a real app you'd use an API)
+  async function convertCurrency() {
+    const amount = parseFloat(document.getElementById("currencyAmount").value);
+    const fromCurrency = document.getElementById("fromCurrency").value;
+    const toCurrency = document.getElementById("toCurrency").value;
+    
+    if (isNaN(amount) || amount <= 0) {
+      document.getElementById("currencyResult").innerText = "Please enter a valid amount.";
+      return;
+    }
+    
+    // Mock exchange rates (in a real app, fetch from an API)
+    const exchangeRates = {
+      USD: { USD: 1, EUR: 0.85, GBP: 0.73, INR: 74.5, JPY: 110.5, AUD: 1.35, CAD: 1.25 },
+      EUR: { USD: 1.18, EUR: 1, GBP: 0.86, INR: 88.2, JPY: 130.1, AUD: 1.59, CAD: 1.47 },
+      GBP: { USD: 1.37, EUR: 1.16, GBP: 1, INR: 102.3, JPY: 151.0, AUD: 1.85, CAD: 1.71 },
+      INR: { USD: 0.013, EUR: 0.011, GBP: 0.0098, INR: 1, JPY: 1.48, AUD: 0.018, CAD: 0.017 },
+      JPY: { USD: 0.009, EUR: 0.0077, GBP: 0.0066, INR: 0.68, JPY: 1, AUD: 0.012, CAD: 0.011 },
+      AUD: { USD: 0.74, EUR: 0.63, GBP: 0.54, INR: 55.6, JPY: 82.1, AUD: 1, CAD: 0.93 },
+      CAD: { USD: 0.8, EUR: 0.68, GBP: 0.58, INR: 59.8, JPY: 88.3, AUD: 1.08, CAD: 1 }
+    };
+    
+    // Simulate API delay
+    document.getElementById("currencyResult").innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
+    
+    setTimeout(() => {
+      const rate = exchangeRates[fromCurrency][toCurrency];
+      const convertedAmount = amount * rate;
+      
+      document.getElementById("currencyResult").innerHTML = 
+        `${amount.toFixed(2)} ${fromCurrency} = <strong>${convertedAmount.toFixed(2)} ${toCurrency}</strong>`;
+      document.getElementById("exchangeRate").innerHTML = 
+        `Exchange Rate: 1 ${fromCurrency} = ${rate.toFixed(6)} ${toCurrency}`;
+    }, 500);
+  }
+
+  // Calculator Functions
+  function appendValue(val) {
+    const input = document.getElementById("calcInput");
+    input.value += val;
+    input.focus();
+  }
+
+  function backspace() {
+    const input = document.getElementById("calcInput");
+    input.value = input.value.slice(0, -1);
+    input.focus();
+  }
+
+  function clearInput() {
+    document.getElementById("calcInput").value = '';
+    document.getElementById("calcResult").innerText = '0';
+    document.getElementById("calcInput").focus();
+  }
+
   function calculate() {
     try {
       let expression = document.getElementById("calcInput").value;
-      let result = eval(expression);
-      document.getElementById("calcResult").innerText = "Result: " + result;
+      
+      // Replace × with *, ÷ with / for eval
+      expression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+      
+      // Handle percentage calculations
+      if (expression.includes('%')) {
+        const parts = expression.split('%');
+        if (parts.length === 2) {
+          const value = parseFloat(parts[0]);
+          const percent = parseFloat(parts[1]);
+          if (!isNaN(value) && !isNaN(percent)) {
+            expression = `${value} * ${percent} / 100`;
+          }
+        }
+      }
+      
+      const result = eval(expression);
+      document.getElementById("calcResult").innerHTML = 
+        `Result: <strong>${result.toLocaleString()}</strong>`;
     } catch (e) {
       document.getElementById("calcResult").innerText = "Invalid Expression!";
     }
   }
+
+  // Keyboard support for calculator
+  document.addEventListener('keydown', function(e) {
+    const key = e.key;
+    const calcInput = document.getElementById('calcInput');
+    
+    // Only handle keyboard input when calculator is active and input is focused
+    if (!document.getElementById('normalCalc').classList.contains('active') || 
+        document.activeElement !== calcInput) {
+      return;
+    }
+    
+    // Allow numbers, operators, and some special keys
+    if (/[0-9+\-*/.%()]/.test(key)) {
+      appendValue(key);
+      e.preventDefault();
+    } else if (key === 'Enter') {
+      calculate();
+      e.preventDefault();
+    } else if (key === 'Backspace') {
+      backspace();
+      e.preventDefault();
+    } else if (key === 'Escape') {
+      clearInput();
+      e.preventDefault();
+    } else if (key === '/') {
+      appendValue('÷');
+      e.preventDefault();
+    }
+  });
 </script>
 
 </body>
